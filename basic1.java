@@ -18,17 +18,6 @@ import java.util.Scanner;
 
 //   ZOO MANAGEMENT SYSTEM
 
-// Implement Class, Object and Data Members with following conditions
-
-// -Class Should have minimum 5 instance variables, Local variables and Class Variables
-///////////// -Use Appropriate access specifiers and data type for each data variable and members inside the class
-// -Initialize the object using reference variable and method
-// -Creating multiple object by one type and Array of objects
-//      class obj1=new class(),obj2=new class;
-// -Create minimum one object using newInstance() method
-// -Anonymous Class Extending a Class
-// - Create one Anonymous object
-
 // new instance method
 
 class basic1{
@@ -40,6 +29,7 @@ class basic1{
     }
     public static void main(String args[]){
 
+        System.out.println("\t\tHELLO "+args[0]);
         int choice;
         String userId,userPassword;
         Scanner sc = new Scanner (System.in);
@@ -98,12 +88,10 @@ class Users{
 
         while(loop==1){
             System.out.println("\nEnter your choice : ");
-            String alpha=sc.nextLine();
-        choice=Integer.valueOf(alpha);
+        choice=sc.nextInt();
         switch(choice){
 
-            case 1 :    System.out.println(("Enter the no. of tickets : "));
-                        Tickets obj1 = new Tickets();
+            case 1 :   Tickets obj1 = new Tickets();
                         obj1.verify();
                         break;
         
@@ -114,12 +102,16 @@ class Users{
                                               System.out.println("\nCare taker ID : "+c_id+"\nName : "+c_name+"\nShift : "+shift+"\nContact : "+c_contact+"\nEmail : "+c_email+"\nAddress : "+c_address);
                                             }
                                   };
+                        // ANONYMOUS CLASS
                         
                         // SHALLOW COPY
                         Care_taker ct4=ct1;
 
-                        System.out.println("\nOBJECT 4 SHALLOW COPY OF OBJECT 1");
-                        ct4.get_details();
+                        System.out.println("\nOBJECT 1");
+                        ct1.get_details();
+
+                        System.out.println("\nOBJECT 4 SHALLOW COPY OF OBJECT 1 - CHAGE SHIFT");
+                        ct4.change_of_shift("morning");
 
                         System.out.println("\nOBJECT 2 ");
                         ct2.get_details();
@@ -130,26 +122,29 @@ class Users{
                         ct5.c_name=ct2.c_name;
                         ct5.shift=ct2.shift;
 
+                        // System.out.println("\nOBJECT 5 DEEP COPY OF OBJECT 2");
+                        // ct5.get_details();
+                        
+                        System.out.println("\nOBJECT 2 - CHANGE SHIFT");
+                        // ct1.change_of_shift("morning");
+                        ct2.change_of_shift("morning");
+
                         System.out.println("\nOBJECT 5 DEEP COPY OF OBJECT 2");
                         ct5.get_details();
-                        
-                        System.out.println("\nOBJECT 1 and OBJECT 2");
-                        ct1.change_of_shift("morning");
-                        ct2.change_of_shift("morning");
 
                         System.out.println("\nOBJECT 3 : ANONYMOUS CLASS");
                         ct3.get_details();
                         break;
 
             // STATIC METHOD
-            case 3 :    Scanner scan=new Scanner(System.in); 
-                        System.out.println("Enter the ticket price : ");
+            case 3 :    System.out.println("Enter the ticket price : ");
                         float price=sc.nextFloat();
                         Tickets.set_price(price);
-                        scan.close();
+                        Tickets.VIP.vip_pass(price);
+                        Tickets.VIP.vip_pass(price, 10);
                      break;
                                 
-            case 5 :    loop=0;
+            case 5 :    loop=0;break;
             default : loop=1;
         }
     }
@@ -268,7 +263,7 @@ class Manager{
     public void change_of_shift(String shift){
         this.shift=shift;
     }
-    public void payment(){
+    private void payment(){
         int payment_id ;
         String e_name ;
         String mode ;
@@ -289,7 +284,7 @@ class Security{
 
     public void get_details(){}
     public void change_of_shift(){}
-    public void payment(){}
+    private void payment(){}
 }
 
 class Care_taker{
@@ -328,7 +323,7 @@ class Care_taker{
         System.out.println("\nCare taker ID : "+c_id+"\nName : "+c_name+"\nShift : "+shift);
     }
     public void change_of_department(){}
-    public void payment(){}
+    private void payment(){}
 }
 
 
@@ -347,7 +342,7 @@ class Tickets{
     static int max_ticket=10;
 
     static int Tickets[] =new int[20]; //    No. of tickets ;
-    static int ticketId=2; 
+    static int ticketId; 
 
     // public void advance_booking(int no_of_ticket,Date date){
 
@@ -407,7 +402,7 @@ class Tickets{
             System.out.println("The new VIP pass price is "+(price+30));
         }
         public static void vip_pass(float price,int members){
-            System.out.println("The new VIP pass discount for above "+members+" members is 5% and discount price will be "+((price*members+30 )-((price+30)*members*5/100)));
+            System.out.println("The new VIP pass discount for "+members+" members is 5% and discount price will be "+(((price+30)*members*5/100)));
             
         }
     }
@@ -416,8 +411,8 @@ class Tickets{
         
         System.out.println("The new ticket price is "+price);
        
-        VIP.vip_pass(price,10);
-        VIP.vip_pass(price);
+        // VIP.vip_pass(price,10);
+        // VIP.vip_pass(price);
     }
 
     public void payment(){}
