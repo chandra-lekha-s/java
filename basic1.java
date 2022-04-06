@@ -94,11 +94,12 @@ class Users{
         int choice=0,loop=1;
         Scanner sc = new Scanner (System.in);
         
-        System.out.println("Enter your choice\n\t 1. View tickets booked \n\t 2. Care taker \n\t 5. Log out");
+        System.out.println("Enter your choice\n\t 1. View tickets booked \n\t 2. Care taker \n\t 3. Set ticket price  \n\t 5. Log out");
 
         while(loop==1){
             System.out.println("\nEnter your choice : ");
-        choice=sc.nextInt();
+            String alpha=sc.nextLine();
+        choice=Integer.valueOf(alpha);
         switch(choice){
 
             case 1 :    System.out.println(("Enter the no. of tickets : "));
@@ -113,16 +114,43 @@ class Users{
                                               System.out.println("\nCare taker ID : "+c_id+"\nName : "+c_name+"\nShift : "+shift+"\nContact : "+c_contact+"\nEmail : "+c_email+"\nAddress : "+c_address);
                                             }
                                   };
-                        ct1.get_details();
+                        
+                        // SHALLOW COPY
+                        Care_taker ct4=ct1;
+
+                        System.out.println("\nOBJECT 4 SHALLOW COPY OF OBJECT 1");
+                        ct4.get_details();
+
+                        System.out.println("\nOBJECT 2 ");
                         ct2.get_details();
 
+                        // DEEP COPY
+                        Care_taker ct5= new Care_taker(41,"Chandu","morning");
+                        ct5.c_id=ct2.c_id;
+                        ct5.c_name=ct2.c_name;
+                        ct5.shift=ct2.shift;
+
+                        System.out.println("\nOBJECT 5 DEEP COPY OF OBJECT 2");
+                        ct5.get_details();
+                        
+                        System.out.println("\nOBJECT 1 and OBJECT 2");
                         ct1.change_of_shift("morning");
                         ct2.change_of_shift("morning");
 
+                        System.out.println("\nOBJECT 3 : ANONYMOUS CLASS");
                         ct3.get_details();
                         break;
 
+            // STATIC METHOD
+            case 3 :    Scanner scan=new Scanner(System.in); 
+                        System.out.println("Enter the ticket price : ");
+                        float price=sc.nextFloat();
+                        Tickets.set_price(price);
+                        scan.close();
+                     break;
+                                
             case 5 :    loop=0;
+            default : loop=1;
         }
     }
 
@@ -274,23 +302,24 @@ class Care_taker{
     String animal_type;
     String shift;
 
-    public  Care_taker(int c_id,String c_name,int c_contact,String c_email,String c_address,int c_salary,String animal_type,String shift){
-        this.c_id=c_id;
-        this.c_name=c_name;
-        this.c_contact=c_contact;
-        this.c_email=c_email;
-        this.c_address=c_address;
-        this.c_salary=c_salary;
-        this.animal_type=animal_type;
-        this.shift=shift;
-    }
 
+    // CONSTRUCTOR OVERLOADING
     public Care_taker(int c_id, String c_name, String shift){
         this.c_id=c_id;
         this.c_name=c_name;
         this.shift=shift;
     }
 
+    public  Care_taker(int c_id,String c_name,int c_contact,String c_email,String c_address,int c_salary,String animal_type,String shift){
+        this(c_id,c_name,shift);
+        this.c_contact=c_contact;
+        this.c_email=c_email;
+        this.c_address=c_address;
+        this.c_salary=c_salary;
+        this.animal_type=animal_type;
+    }
+
+    
     public void get_details(){
         System.out.println("\nCare taker ID : "+c_id+"\nName : "+c_name+"\nShift : "+shift);
     }
@@ -311,14 +340,18 @@ class Care_taker{
 class Tickets{
     Date date;
     // static int ticket_id;
+
+    // STATIC VARIABLES
     int no_of_ticket;
     static float price=60;
     static int max_ticket=10;
 
     static int Tickets[] =new int[20]; //    No. of tickets ;
-    static int ticketId=0; 
+    static int ticketId=2; 
 
     // public void advance_booking(int no_of_ticket,Date date){
+
+    // METHOD OVERLOADING
     public void advance_booking(int no_of_ticket){
         // ticket_id=ticket_id+1;
         // this.date=date;
@@ -364,13 +397,29 @@ class Tickets{
         max_ticket=sc.nextInt();
         sc.close();
     }
-    public void set_price(){
-        Scanner sc=new Scanner(System.in); 
-        System.out.println("Enter the ticket price : ");
-        price=sc.nextFloat();
-        System.out.println("The new ticket price is "+price);
-        sc.close();
+
+    // STATIC CLASS AND METHODS
+    // NESTED STATIC 
+
+    static class VIP{
+        
+        public static void vip_pass(float price){
+            System.out.println("The new VIP pass price is "+(price+30));
+        }
+        public static void vip_pass(float price,int members){
+            System.out.println("The new VIP pass discount for above "+members+" members is 5% and discount price will be "+((price*members+30 )-((price+30)*members*5/100)));
+            
+        }
     }
+
+    public static void set_price(float price){
+        
+        System.out.println("The new ticket price is "+price);
+       
+        VIP.vip_pass(price,10);
+        VIP.vip_pass(price);
+    }
+
     public void payment(){}
 }
 
